@@ -16,6 +16,17 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
+  byId: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${input.id}`,
+      );
+      const data = (await response.json()) as { id: number; title: string };
+
+      return data;
+    }),
+
   create: publicProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ input }) => {
